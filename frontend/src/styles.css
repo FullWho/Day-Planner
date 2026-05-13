@@ -1,0 +1,735 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: light;
+  --bg: #edf2f7;
+  --panel: #fbfdff;
+  --panel-2: #ffffff;
+  --text: #172033;
+  --muted: #64748b;
+  --line: #d8e1ee;
+  --accent: #172033;
+  --accent-soft: #e8eef7;
+  --danger: #e2475b;
+  --shadow: 0 18px 45px rgba(15, 23, 42, .10);
+  --task-low: #d8f6e8;
+  --task-low-border: #11a36a;
+  --task-medium: #dbeafe;
+  --task-medium-border: #3979f2;
+  --task-high: #ffe1e5;
+  --task-high-border: #fb4961;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b1120;
+  --panel: #111827;
+  --panel-2: #172033;
+  --text: #e5edf8;
+  --muted: #9aa9bd;
+  --line: #283449;
+  --accent: #e5edf8;
+  --accent-soft: #1d2a3e;
+  --danger: #fb7185;
+  --shadow: 0 18px 45px rgba(0, 0, 0, .30);
+  --task-low: #103929;
+  --task-low-border: #34d399;
+  --task-medium: #122d55;
+  --task-medium-border: #60a5fa;
+  --task-high: #4c1720;
+  --task-high-border: #fb7185;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); }
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+
+.loading, .empty-state {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 365px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border-right: 1px solid var(--line);
+  padding: 28px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand.big { margin-bottom: 22px; }
+.brand-icon {
+  width: 52px; height: 52px; border-radius: 18px;
+  display: grid; place-items: center;
+  color: #fff; background: linear-gradient(135deg, #111827, #334155);
+  box-shadow: var(--shadow);
+  flex: 0 0 auto;
+}
+.brand h1 { margin: 0; font-size: 23px; line-height: 1.1; }
+.brand p { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
+
+.current-card {
+  border-radius: 24px;
+  padding: 24px;
+  background: linear-gradient(135deg, #172033, #2f4163);
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+.current-card h2 { margin: 8px 0; font-size: 24px; }
+.current-card p { color: #dbe6f5; margin: 0; line-height: 1.5; }
+.eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; font-weight: 800; color: #6f7f98; margin: 0 0 8px; }
+.eyebrow.light { color: #c8d4e7; }
+.current-list { display: grid; gap: 10px; }
+.current-item { border-radius: 16px; padding: 12px; font-weight: 800; }
+.current-item span { display: block; margin-top: 4px; font-size: 12px; font-weight: 600; opacity: .85; }
+.current-item.low { background: rgba(16, 185, 129, .22); }
+.current-item.medium { background: rgba(59, 130, 246, .25); }
+.current-item.high { background: rgba(251, 73, 97, .28); }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat { padding: 20px 16px; border-radius: 20px; background: var(--panel-2); border: 1px solid var(--line); }
+.stat strong { display: block; font-size: 25px; }
+.stat span { color: var(--muted); font-size: 13px; }
+
+.task-form, .auth-form, .modal {
+  display: flex; flex-direction: column; gap: 13px;
+}
+.task-form {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 18px;
+}
+.task-form h3 { margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+label { display: flex; flex-direction: column; gap: 7px; color: var(--muted); font-size: 13px; font-weight: 800; }
+input, textarea, select {
+  width: 100%; border: 1px solid var(--line); background: var(--panel);
+  color: var(--text); border-radius: 14px; padding: 12px 13px; outline: none;
+}
+textarea { min-height: 72px; resize: vertical; }
+input:focus, textarea:focus, select:focus { border-color: #5b83e6; box-shadow: 0 0 0 4px rgba(59, 130, 246, .12); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.primary-btn, .ghost-btn, .icon-btn, .danger-btn {
+  border: 0; border-radius: 14px; min-height: 42px; padding: 0 16px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: .18s ease;
+}
+.primary-btn { background: var(--accent); color: var(--panel-2); font-weight: 800; }
+:root[data-theme="dark"] .primary-btn { color: #111827; }
+.ghost-btn { background: var(--panel-2); border: 1px solid var(--line); color: var(--text); font-weight: 800; }
+.ghost-btn.active { background: var(--accent-soft); border-color: #6a8cdf; }
+.icon-btn { width: 44px; padding: 0; background: var(--panel-2); color: var(--text); border: 1px solid var(--line); }
+.danger-btn { background: var(--danger); color: #fff; font-weight: 800; }
+button:hover { transform: translateY(-1px); filter: brightness(1.02); }
+button:disabled { opacity: .65; cursor: wait; }
+
+.main-panel { padding: 24px 26px; overflow: hidden; }
+.topbar {
+  display: flex; justify-content: space-between; align-items: center; gap: 22px; margin-bottom: 22px;
+}
+.topbar h2 { margin: 0; text-transform: capitalize; font-size: 31px; letter-spacing: -.03em; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.date-input { width: 156px; min-height: 42px; }
+.clock-box, .user-chip {
+  min-height: 42px; padding: 0 14px; border-radius: 16px;
+  background: var(--panel-2); border: 1px solid var(--line); display: flex; align-items: center; gap: 8px;
+  font-weight: 900;
+}
+.user-chip { color: var(--muted); font-weight: 800; }
+
+.timeline-shell {
+  height: calc(100vh - 128px);
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  box-shadow: var(--shadow);
+}
+.timeline {
+  position: relative;
+  margin-left: 94px;
+  margin-right: 30px;
+  padding-top: 16px;
+}
+.hour-row {
+  position: absolute; left: 0; right: 0; height: 1px; background: var(--line);
+}
+.hour-row span {
+  position: absolute; left: -74px; top: -10px;
+  color: #6c7f9d; font-size: 13px; font-weight: 800;
+}
+.now-line {
+  position: absolute; left: 0; right: 0; height: 2px; background: #ff4c61; z-index: 10;
+  box-shadow: 0 0 0 5px rgba(255, 76, 97, .10);
+}
+.now-line::before {
+  content: ''; position: absolute; left: -8px; top: -7px;
+  width: 16px; height: 16px; border-radius: 50%; background: #ff4c61; box-shadow: 0 0 0 8px rgba(255, 76, 97, .14);
+}
+.now-line span {
+  position: absolute; right: 0; top: -14px; padding: 4px 8px; border-radius: 999px;
+  color: #fff; background: #ff4c61; font-size: 11px; font-weight: 900;
+}
+.task-card {
+  position: absolute;
+  border-radius: 19px;
+  padding: 12px 14px 10px 16px;
+  border-left: 6px solid;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, .12);
+  overflow: hidden;
+  z-index: 5;
+  min-height: 64px;
+}
+.task-card.low { background: var(--task-low); border-left-color: var(--task-low-border); }
+.task-card.medium { background: var(--task-medium); border-left-color: var(--task-medium-border); }
+.task-card.high { background: var(--task-high); border-left-color: var(--task-high-border); }
+.task-card.completed { opacity: .62; }
+.task-card-content { display: flex; justify-content: space-between; gap: 10px; height: 100%; }
+.task-card h4 { margin: 0 0 4px; font-size: 15px; line-height: 1.15; }
+.task-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.25; max-height: 32px; overflow: hidden; }
+.task-meta { display: block; margin-top: 7px; color: #506788; font-size: 12px; font-weight: 900; }
+:root[data-theme="dark"] .task-meta { color: #b4c2d6; }
+.task-actions { display: flex; flex-direction: column; gap: 7px; flex: 0 0 auto; }
+.task-actions button {
+  border: 0; border-radius: 11px; min-height: 30px; padding: 0 10px;
+  background: #142033; color: #fff; font-size: 12px; font-weight: 900;
+}
+.carry-label { position: absolute; right: 12px; bottom: 6px; color: var(--muted); font-size: 11px; font-weight: 900; }
+
+.auth-page {
+  min-height: 100vh; display: grid; place-items: center; padding: 24px;
+  background: radial-gradient(circle at top left, rgba(91, 131, 230, .18), transparent 36%), var(--bg);
+}
+.auth-card {
+  width: min(460px, 100%); padding: 28px; border-radius: 28px;
+  background: var(--panel-2); border: 1px solid var(--line); box-shadow: var(--shadow);
+}
+
+.auth-topline { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+.auth-topline .brand.big { margin-bottom: 0; }
+.auth-theme-btn { flex: 0 0 44px; }
+
+.auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: var(--accent-soft); border-radius: 16px; padding: 6px; margin-bottom: 18px; }
+.auth-tabs button { border: 0; border-radius: 12px; background: transparent; color: var(--muted); min-height: 40px; font-weight: 900; }
+.auth-tabs button.active { background: var(--panel-2); color: var(--text); box-shadow: 0 8px 18px rgba(15, 23, 42, .08); }
+.error-box { padding: 12px 14px; border-radius: 16px; background: rgba(226, 71, 91, .12); color: var(--danger); border: 1px solid rgba(226, 71, 91, .28); font-weight: 800; }
+.error-box.small { font-size: 12px; padding: 9px 11px; }
+.page-error { margin-bottom: 16px; }
+
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(3, 7, 18, .55);
+  display: grid; place-items: center; padding: 22px; z-index: 50;
+}
+.modal {
+  width: min(520px, 100%); background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 26px; padding: 22px; box-shadow: var(--shadow);
+}
+.modal-head, .modal-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.modal h3 { margin: 0; }
+
+.calendar-page {
+  min-height: calc(100vh - 128px);
+  border: 1px solid var(--line); border-radius: 26px;
+  background: var(--panel-2); box-shadow: var(--shadow); padding: 24px;
+}
+.calendar-head { display: flex; align-items: center; justify-content: center; gap: 18px; }
+.calendar-head h2 { min-width: 260px; text-align: center; text-transform: capitalize; }
+.calendar-note { text-align: center; color: var(--muted); }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+.weekdays { margin: 22px 0 10px; color: var(--muted); font-weight: 900; text-align: center; }
+.calendar-day {
+  min-height: 96px; border: 1px solid var(--line); border-radius: 18px; padding: 12px;
+  background: var(--panel); color: var(--text); display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
+}
+.calendar-day strong { font-size: 18px; }
+.calendar-day span { font-size: 12px; font-weight: 900; color: var(--muted); }
+.calendar-day.out { opacity: .55; }
+.calendar-day.disabled { opacity: .25; cursor: not-allowed; filter: grayscale(1); }
+.calendar-day.selected { outline: 3px solid rgba(91, 131, 230, .35); }
+.calendar-day.low:not(.disabled) { background: var(--task-low); border-color: var(--task-low-border); }
+.calendar-day.medium:not(.disabled) { background: var(--task-medium); border-color: var(--task-medium-border); }
+.calendar-day.high:not(.disabled) { background: var(--task-high); border-color: var(--task-high-border); }
+
+@media (max-width: 1100px) {
+  .app-shell { grid-template-columns: 1fr; }
+  .sidebar { position: relative; height: auto; }
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .timeline-shell { height: 70vh; }
+}
+
+
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 48px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+}
+
+.password-toggle:hover {
+  background: var(--soft);
+  color: var(--text);
+}
+
+
+/* Убираем встроенную кнопку просмотра пароля в Edge/IE,
+   чтобы не было второй «старой» иконки глаза рядом с нашей кнопкой. */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-caps-lock-indicator {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+}
+
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.48;
+}
+
+/* Правки таймлайна: карточки задач растягиваются по длительности,
+   а при наложениях остаются читаемыми за счёт минимальной ширины поля. */
+.timeline-shell {
+  overflow-x: auto;
+}
+
+.timeline {
+  min-width: 1180px;
+}
+
+.task-card {
+  cursor: default;
+  display: flex;
+}
+
+.task-card-content {
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.task-card h4,
+.task-card p,
+.task-meta {
+  overflow-wrap: anywhere;
+}
+
+.task-card p {
+  max-height: 52px;
+}
+
+.task-actions {
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.task-actions button {
+  min-width: 34px;
+}
+
+.profile-btn {
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+
+input:disabled {
+  opacity: .72;
+  cursor: not-allowed;
+}
+
+/* Финальные правки отображения задач и профиля */
+.current-card .eyebrow.light {
+  margin-bottom: 18px;
+}
+.current-list.spaced {
+  gap: 12px;
+}
+.current-item-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.current-item-head strong {
+  display: block;
+  line-height: 1.2;
+}
+.current-item-head button,
+.current-expanded-actions button {
+  border: 0;
+  border-radius: 10px;
+  min-height: 28px;
+  padding: 0 9px;
+  background: rgba(15, 23, 42, .55);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex: 0 0 auto;
+}
+.current-expanded {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, .18);
+}
+.current-expanded p {
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0 0 10px;
+  color: rgba(255, 255, 255, .88);
+}
+.current-expanded-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.timeline {
+  padding-bottom: 40px;
+}
+.task-card {
+  min-height: 78px;
+}
+.task-card.short {
+  min-height: 94px;
+}
+.task-card-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 7px;
+}
+.task-main-text {
+  padding-right: 96px;
+  min-width: 0;
+}
+.task-card.short .task-main-text {
+  padding-right: 104px;
+}
+.task-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 2;
+}
+.task-actions button {
+  min-height: 28px;
+  height: 28px;
+  white-space: nowrap;
+}
+.task-card.short p {
+  max-height: 18px;
+}
+.task-card.short .task-meta {
+  margin-top: 4px;
+}
+.profile-modal {
+  max-height: 92vh;
+  overflow-y: auto;
+}
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding-top: 14px;
+}
+.profile-section + .profile-section {
+  margin-top: 16px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.password-change h4 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.success-box {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(16, 185, 129, .14);
+  color: var(--task-low-border);
+  border: 1px solid rgba(16, 185, 129, .32);
+  font-weight: 800;
+}
+.ghost-btn svg,
+.icon-btn svg,
+.primary-btn svg,
+.danger-btn svg,
+.task-form h3 svg,
+.password-change h4 svg {
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+select {
+  line-height: 1.2;
+}
+
+/* Правки: текущие/следующие/просроченные задачи в боковой панели */
+.sidebar-subsection {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, .16);
+}
+.small-title {
+  margin-bottom: 12px !important;
+  font-size: 11px;
+}
+.overdue-card {
+  background: linear-gradient(135deg, rgba(127, 29, 29, .92), rgba(69, 10, 10, .82));
+}
+.overdue-card .current-item {
+  background: rgba(255, 255, 255, .12);
+}
+.current-card h2 + p {
+  margin-bottom: 2px;
+}
+
+/* Правки таймлайна: фиксированное поле 00:00–24:00, карточки не должны наезжать из-за визуальной минимальной высоты */
+.timeline-shell {
+  overflow-x: auto;
+}
+.task-card {
+  max-width: 100%;
+}
+.task-card .task-actions button {
+  line-height: 1;
+}
+
+/* Финальные UI-правки профиля, тем, раскрытия и выполненных задач */
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) {
+  background: linear-gradient(135deg, #ffffff, #eef4ff);
+  color: var(--text);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) h2 {
+  color: var(--text);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) p,
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .eyebrow.light {
+  color: var(--muted);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection {
+  border-top-color: rgba(100, 116, 139, .20);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .current-expanded {
+  border-top-color: rgba(100, 116, 139, .22);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .current-expanded p {
+  color: var(--muted);
+}
+
+.current-item-head .expand-btn {
+  width: 32px;
+  height: 30px;
+  min-height: 30px;
+  padding: 0;
+  border-radius: 10px;
+}
+.current-item-head .expand-btn svg {
+  transition: transform .18s ease;
+}
+.current-item-head .expand-btn.open svg {
+  transform: rotate(180deg);
+}
+
+.task-card.completed {
+  filter: saturate(.72) brightness(.86);
+  opacity: .78;
+}
+.task-card.completed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(15, 23, 42, .08) 0,
+    rgba(15, 23, 42, .08) 8px,
+    transparent 8px,
+    transparent 18px
+  );
+  z-index: 1;
+}
+:root[data-theme="dark"] .task-card.completed::after {
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .08) 0,
+    rgba(255, 255, 255, .08) 8px,
+    transparent 8px,
+    transparent 18px
+  );
+}
+.task-card.completed .task-card-content,
+.task-card.completed .carry-label {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* Дополнительная правка: блок следующих задач в светлой теме заметнее, а ввод минут не зажимается до 15 автоматически. */
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection {
+  margin-left: -8px;
+  margin-right: -8px;
+  padding: 16px 12px 4px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(219, 234, 254, .85), rgba(232, 240, 255, .92));
+  border: 1px solid rgba(91, 131, 230, .20);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .small-title {
+  color: #415c83;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .current-item {
+  border: 1px solid rgba(91, 131, 230, .20);
+  box-shadow: 0 10px 22px rgba(59, 130, 246, .10);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .current-item.low {
+  background: #c9f1df;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .current-item.medium {
+  background: #c8ddff;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .current-item.high {
+  background: #ffd1d8;
+}
+
+
+/* Последние правки: аккуратнее блок следующих задач в светлой теме и минимальное время 5 минут. */
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection {
+  margin: 18px 0 0;
+  padding: 16px 14px 14px;
+  border-top: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #edf5ff, #e6f0ff);
+  border: 1px solid #c8daf8;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 8px 18px rgba(59, 130, 246, .08);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .small-title {
+  margin: 0 0 12px !important;
+  color: #3c5578;
+  line-height: 1.25;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection > p:not(.small-title) {
+  color: #516782;
+  line-height: 1.45;
+  margin: 0;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .current-list {
+  margin-top: 0;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .current-item {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Правка: в светлой и темной теме виджет текущих/следующих задач выглядит одинаково. Образец — темная тема. */
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) {
+  background: linear-gradient(135deg, #172033, #2f4163);
+  color: #fff;
+  border: none;
+  box-shadow: var(--shadow);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) h2 {
+  color: #fff;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) p,
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .eyebrow.light {
+  color: #dbe6f5;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection {
+  margin-top: 18px;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 16px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, .16);
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .small-title {
+  margin: 0 0 12px !important;
+  color: #c8d4e7;
+  line-height: 1.25;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection > p:not(.small-title) {
+  color: #dbe6f5;
+  line-height: 1.45;
+  margin: 0;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .current-item {
+  border: 0;
+  box-shadow: none;
+  color: #fff;
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .current-item.low {
+  background: rgba(16, 185, 129, .22);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .current-item.medium {
+  background: rgba(59, 130, 246, .25);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .sidebar-subsection .current-item.high {
+  background: rgba(251, 73, 97, .28);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .current-expanded {
+  border-top-color: rgba(255, 255, 255, .16);
+}
+:root:not([data-theme="dark"]) .current-card:not(.overdue-card) .current-expanded p {
+  color: #dbe6f5;
+}
