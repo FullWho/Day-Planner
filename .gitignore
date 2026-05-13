@@ -11,21 +11,26 @@ Thumbs.db
 .env
 .env.local
 
-# Database
+# Databases
 *.db
 *.sqlite
 *.sqlite3
 backend/planner.db
 
-# Go
+# Go build artifacts
 backend/server
-backend/tmp/
 backend/*.exe
+backend/tmp/
 
 # Node / React
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
 
-# Docker
+# Test artifacts
+frontend/playwright-report/
+frontend/test-results/
+coverage/
+
+# Docker/local data
 docker-data/
