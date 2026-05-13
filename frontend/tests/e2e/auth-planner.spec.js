@@ -105,7 +105,7 @@ test.describe('Планировщик', () => {
     await page.getByRole('button', { name: 'Добавить' }).click();
 
     await expect(
-      page.getByText('Минимальное время для задачи - 5 минут')
+      page.getByText('Минимальное время для задачи - 5 минут').first()
     ).toBeVisible();
   });
 });
